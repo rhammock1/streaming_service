@@ -1,11 +1,12 @@
 require('marko/node-require');
+
 const express = require('express');
-const markoExpress = require('marko/express');
+const markoExpress = require('@marko/express').default;
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const fs = require('fs');
 const path = require('path');
+const videoRouter = require('./video-router/video-router');
 const { NODE_ENV } = require('./config');
 require('dotenv').config();
 
@@ -18,10 +19,11 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use('/videos', videoRouter);
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+})
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
